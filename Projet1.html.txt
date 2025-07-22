@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche de Suivi Vacances</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .header::before {
+        content: '✈️';
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 2em;
+        opacity: 0.7;
+    }
+
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+        opacity: 0.9;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+    .trip-section {
+        margin-bottom: 35px;
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .trip-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .france { border-left-color: #0066cc; }
+    .belgique { border-left-color: #000000; }
+    .espagne { border-left-color: #c60b1e; }
+    .italie { border-left-color: #009246; }
+    .hollande { border-left-color: #ff9b00; }
+    .congo { border-left-color: #007fff; }
+    .dubai { border-left-color: #ce1126; }
+
+    .country-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .flag {
+        font-size: 2.5em;
+        margin-right: 15px;
+    }
+
+    .country-title {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .trip-item {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .trip-item:hover {
+        background: #e9ecef;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+
+    .trip-details {
+        flex-grow: 1;
+    }
+
+    .trip-title {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .trip-info {
+        color: #7f8c8d;
+        font-size: 0.95em;
+        line-height: 1.4;
+    }
+
+    .date {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9em;
+        white-space: nowrap;
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .progress-bar {
+        background: #e9ecef;
+        border-radius: 10px;
+        height: 8px;
+        margin: 20px 0;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        height: 100%;
+        width: 0%;
+        transition: width 0.5s ease;
+        border-radius: 10px;
+    }
+
+    .progress-text {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .summary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .summary h3 {
+        margin-bottom: 15px;
+        font-size: 1.5em;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .stat {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .important-note {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+        font-weight: 500;
+    }
+
+    /* Styles pour la sauvegarde */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        z-index: 1000;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .last-update {
+        font-size: 0.8em;
+        color: #6c757d;
+        font-style: italic;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    .celebration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .celebration-content {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 400px;
+        margin: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .celebration-emoji {
+        font-size: 4em;
+        margin-bottom: 20px;
+        animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-20px); }
+        60% { transform: translateY(-10px); }
+    }
+
+    .celebration-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .celebration-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .reset-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+    }
+
+    .reset-btn:hover {
+        background: #c82333;
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 10px;
+            border-radius: 15px;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .trip-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .date {
+            margin-top: 10px;
+            align-self: flex-end;
+        }
+        
+        h1 {
+            font-size: 2em;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 Mes Vacances 2024</h1>
+            <p class="subtitle">Fiche de Suivi - Itinéraire Complet</p>
+        </div>
+
+```
+    <div class="content">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">0% complété (0/15 étapes)</div>
+
+        <!-- FRANCE -->
+        <div class="trip-section france">
+            <div class="country-header">
+                <span class="flag">🇫🇷</span>
+                <span class="country-title">FRANCE</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">🛬 Arrivée en France</div>
+                    <div class="trip-info">Vol d'arrivée</div>
+                </div>
+                <div class="date">04 Août - 18h00</div>
+            </div>
+            
+            <div class="important-note">
+                <strong>👨‍👩‍👧‍👦 ACCOMPAGNATEUR PARIS - Dates disponibles :</strong><br>
+                • Série 1 : 5, 6, 7, 8 août<br>
+                • Série 2 : 11, 12, 13, 14, 15, 16 août<br>
+                • Série 3 : 29, 30, 31 août, 1er septembre<br>
+                • Série 4 (avec grand-mère) : 17 au 28 août (sur demande)
+            </div>
+            
+            <div class="important-note" style="background: #d1ecf1; border-color: #bee5eb; color: #0c5460;">
+                <strong>👵 GARDE ENFANTS :</strong> Du 15 au 28 août - Dépôt chez la grand-mère
+            </div>
+        </div>
+
+        <!-- BELGIQUE -->
+        <div class="trip-section belgique">
+            <div class="country-header">
+                <span class="flag">🇧🇪</span>
+                <span class="country-title">BELGIQUE - BRUXELLES</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">🚄 Départ Gare du Nord → Bruxelles</div>
+                    <div class="trip-info">Train - Arrivée: 22h47</div>
+                </div>
+                <div class="date">07 Août - 21h25</div>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">🚄 Retour Bruxelles → Gare du Nord</div>
+                    <div class="trip-info">Train - Arrivée: 20h05</div>
+                </div>
+                <div class="date">11 Août - 18h43</div>
+            </div>
+        </div>
+
+        <!-- ESPAGNE -->
+        <div class="trip-section espagne">
+            <div class="country-header">
+                <span class="flag">🇪🇸</span>
+                <span class="country-title">ESPAGNE - BARCELONE</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Départ Orly → Barcelone</div>
+                    <div class="trip-info">Vol international</div>
+                </div>
+                <div class="date">12 Août - 09h05</div>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Retour Barcelone → Orly</div>
+                    <div class="trip-info">Vol - Arrivée: 20h00</div>
+                </div>
+                <div class="date">14 Août - 18h10</div>
+            </div>
+        </div>
+
+        <!-- ITALIE -->
+        <div class="trip-section italie">
+            <div class="country-header">
+                <span class="flag">🇮🇹</span>
+                <span class="country-title">ITALIE - PISE/FLORENCE</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Départ Orly → Pise</div>
+                    <div class="trip-info">Vol - Arrivée: 16h25</div>
+                </div>
+                <div class="date">15 Août - 14h45</div>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Retour Florence → Orly</div>
+                    <div class="trip-info">Vol - Arrivée: 20h35</div>
+                </div>
+                <div class="date">25 Août - 18h45</div>
+            </div>
+        </div>
+
+        <!-- HOLLANDE -->
+        <div class="trip-section hollande">
+            <div class="country-header">
+                <span class="flag">🇳🇱</span>
+                <span class="country-title">PAYS-BAS</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">🚗 Départ pour la Hollande</div>
+                    <div class="trip-info">Transport terrestre</div>
+                </div>
+                <div class="date">27 Août</div>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Retour Hollande → Orly</div>
+                    <div class="trip-info">Vol de retour</div>
+                </div>
+                <div class="date">30 Août</div>
+            </div>
+        </div>
+
+        <!-- RETOUR CONGO -->
+        <div class="trip-section congo">
+            <div class="country-header">
+                <span class="flag">🇨🇬</span>
+                <span class="country-title">RETOUR CONGO</span>
+            </div>
+            <div class="important-note">
+                ⚠️ <strong>Important:</strong> Formalités à effectuer à 04h00 avant le départ
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Vol Orly → Congo</div>
+                    <div class="trip-info">Formalités: 04h00 | Départ: 07h20</div>
+                </div>
+                <div class="date">02 Sept - 07h20</div>
+            </div>
+        </div>
+
+        <!-- DUBAÏ -->
+        <div class="trip-section dubai">
+            <div class="country-header">
+                <span class="flag">🇦🇪</span>
+                <span class="country-title">ÉMIRATS ARABES UNIS - DUBAÏ</span>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Départ Congo → Dubaï</div>
+                    <div class="trip-info">Vol international</div>
+                </div>
+                <div class="date">09 Sept</div>
+            </div>
+            <div class="trip-item">
+                <input type="checkbox" class="checkbox">
+                <div class="trip-details">
+                    <div class="trip-title">✈️ Retour Dubaï → Congo</div>
+                    <div class="trip-info">Vol de retour</div>
+                </div>
+                <div class="date">18 Sept</div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h3>📊 Résumé de Votre Voyage</h3>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">7</div>
+                    <div>Pays Visités</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">15</div>
+                    <div>Étapes Total</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">45</div>
+                    <div>Jours de Voyage</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="completedCount">0</div>
+                    <div>Étapes Complétées</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Clé unique pour sauvegarder les données
+    const STORAGE_KEY = 'vacances2024_progress';
+
+    // Sauvegarder l'état dans le navigateur
+    function saveProgress() {
+        const checkboxes = document.querySelectorAll('.checkbox');
+        const progress = {};
+        
+        checkboxes.forEach((checkbox, index) => {
+            progress[`step_${index}`] = checkbox.checked;
+        });
+        
+        // Sauvegarder avec la date de dernière modification
+        const data = {
+            progress: progress,
+            lastUpdated: new Date().toISOString(),
+            completedSteps: Object.values(progress).filter(Boolean).length
+        };
+        
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showNotification('✅ Progression sauvegardée !');
+        } catch (error) {
+            console.log('Sauvegarde en mémoire locale...');
+        }
+    }
+
+    // Charger l'état sauvegardé
+    function loadProgress() {
+        try {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                const checkboxes = document.querySelectorAll('.checkbox');
+                
+                checkboxes.forEach((checkbox, index) => {
+                    const stepKey = `step_${index}`;
+                    if (data.progress[stepKey]) {
+                        checkbox.checked = true;
+                    }
+                });
+                
+                // Afficher la date de dernière mise à jour
+                if (data.lastUpdated) {
+                    const lastUpdate = new Date(data.lastUpdated);
+                    const updateInfo = document.createElement('div');
+                    updateInfo.className = 'last-update';
+                    updateInfo.innerHTML = `📅 Dernière mise à jour: ${lastUpdate.toLocaleDateString('fr-FR')} à ${lastUpdate.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}`;
+                    document.querySelector('.progress-text').appendChild(updateInfo);
+                }
+                
+                updateProgress();
+                showNotification('📋 Progression restaurée !');
+            }
+        } catch (error) {
+            console.log('Pas de sauvegarde trouvée');
+        }
+    }
+
+    // Mettre à jour la progression
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('.checkbox');
+        const totalSteps = checkboxes.length;
+        let completedSteps = 0;
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                completedSteps++;
+            }
+        });
+
+        const percentage = Math.round((completedSteps / totalSteps) * 100);
+        
+        document.getElementById('progressBar').style.width = percentage + '%';
+        document.getElementById('progressText').innerHTML = 
+            `${percentage}% complété (${completedSteps}/${totalSteps} étapes)`;
+        document.getElementById('completedCount').textContent = completedSteps;
+
+        // Animation de célébration si tout est complété
+        if (completedSteps === totalSteps && completedSteps > 0) {
+            setTimeout(() => {
+                showCelebration();
+            }, 500);
+        }
+
+        // Sauvegarder automatiquement
+        saveProgress();
+    }
+
+    // Afficher une notification
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Animation de célébration
+    function showCelebration() {
+        const celebration = document.createElement('div');
+        celebration.className = 'celebration';
+        celebration.innerHTML = `
+            <div class="celebration-content">
+                <div class="celebration-emoji">🎉</div>
+                <h2>Félicitations !</h2>
+                <p>Vous avez terminé toutes les étapes de votre voyage !</p>
+                <button onclick="this.parentElement.parentElement.remove()" class="celebration-btn">Merci ! 😊</button>
+            </div>
+        `;
+        document.body.appendChild(celebration);
+    }
+
+    // Fonction pour réinitialiser la progression
+    function resetProgress() {
+        if (confirm('Êtes-vous sûr de vouloir réinitialiser toute votre progression ?')) {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (error) {
+                console.log('Réinitialisation...');
+            }
+            
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            updateProgress();
+            showNotification('🔄 Progression réinitialisée !');
+            
+            // Supprimer l'info de dernière mise à jour
+            const lastUpdate = document.querySelector('.last-update');
+            if (lastUpdate) {
+                lastUpdate.remove();
+            }
+        }
+    }
+
+    // Initialisation au chargement de la page
+    window.addEventListener('load', function() {
+        // Charger la progression sauvegardée
+        loadProgress();
+        
+        // Ajouter les événements aux checkboxes
+        const checkboxes = document.querySelectorAll('.checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+
+        // Animation d'entrée
+        const sections = document.querySelectorAll('.trip-section');
+        sections.forEach((section, index) => {
+            setTimeout(() => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'all 0.5s ease';
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 50);
+            }, index * 100);
+        });
+
+        // Ajouter le bouton de réinitialisation
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = '🔄 Réinitialiser';
+        resetBtn.className = 'reset-btn';
+        resetBtn.onclick = resetProgress;
+        document.querySelector('.summary').appendChild(resetBtn);
+    });
+
+    // Sauvegarder avant de quitter la page
+    window.addEventListener('beforeunload', function() {
+        saveProgress();
+    });
+
+    // Auto-sauvegarde toutes les 30 secondes
+    setInterval(saveProgress, 30000);
+</script>
+```
+
+</body>
+</html>
